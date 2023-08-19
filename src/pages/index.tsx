@@ -1,5 +1,9 @@
+import { Stack, Text } from "@chakra-ui/react"
+
 export default function Contact() {
   return (
-    <div>Hallo</div>
+    <Stack>
+      <Text>Hallo</Text>
+    </Stack>
   )
 }
