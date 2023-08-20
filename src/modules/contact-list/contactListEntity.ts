@@ -2,7 +2,7 @@ type Phone = {
   number: string;
 }
 
-type Contact = {
+export type Contact = {
   created_at: string;
   id: number;
   first_name: string;

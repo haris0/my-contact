@@ -1,6 +1,7 @@
 import { ContactCard } from '@/components/contactCard/ContactCard';
 import { useContactList } from '@/modules/contact-list/contactListHooks';
-import { Spinner, Stack, Text } from '@chakra-ui/react';
+import { Spinner, Stack } from '@chakra-ui/react';
+import Link from 'next/link';
 
 export const ContactLisScreen = () => {
   const { loading, data } = useContactList({
@@ -16,14 +17,15 @@ export const ContactLisScreen = () => {
         </Stack>
       )}
       {!loading && (data?.contact.length || 0) > 0 && (
-        <Stack marginTop={8}>
+        <Stack marginTop={4} padding={4}>
           {data?.contact.map((cont) => (
-            <ContactCard
-              key={cont.id}
-              firstName={cont.first_name}
-              lastName={cont.last_name}
-              phoneNumber={cont.phones?.[0]?.number || ''}
-            />
+            <Link key={cont.id} href={`/contact/${cont.id}`}>
+              <ContactCard
+                firstName={cont.first_name}
+                lastName={cont.last_name}
+                phoneNumber={cont.phones?.[0]?.number || ''}
+              />
+            </Link>
           ))}
         </Stack>
       )}

@@ -3,6 +3,9 @@ const appConfig = require('./app.config');
 
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    scrollRestoration: true,
+  },
   ...appConfig
 }
 
