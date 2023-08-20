@@ -1,4 +1,4 @@
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, StarIcon } from "@chakra-ui/icons";
 import { 
   Avatar, 
   Button, 
@@ -15,6 +15,7 @@ type ContactCardProps = {
   lastName: string;
   phoneNumber: string;
   onRemove?: () => void;
+  onFavorite?: () => void;
 }
 
 export const ContactCard = (props: ContactCardProps) => {
@@ -34,6 +35,15 @@ export const ContactCard = (props: ContactCardProps) => {
             </Stack>
           </HStack>
           <Stack>
+            <Button
+              onClick={(event) => {
+                event.preventDefault();
+                props.onFavorite?.();
+              }}
+              size='xs'
+            >
+              <StarIcon />
+            </Button>
             <Button 
               onClick={(event) => {
                 event.preventDefault();
