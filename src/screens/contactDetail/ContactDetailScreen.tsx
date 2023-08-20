@@ -1,5 +1,6 @@
 import { useContactDetail } from '@/modules/contact-detail/contactDetailHooks';
-import { Avatar, Card, CardBody, Spinner, Stack, Text } from '@chakra-ui/react';
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { Avatar, Button, Card, CardBody, Spinner, Stack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -28,7 +29,12 @@ export const ContactDetailScreen = () => {
             width='full'
             height={24}
             backgroundColor='gray.700'
+            padding={2}
+            alignItems='flex-end'
           >
+            <Button size='xs' width='fit-content'>
+              <EditIcon />
+            </Button>
           </Stack>
           <Stack marginTop={-14} width='full'>
             <Avatar 
@@ -46,6 +52,16 @@ export const ContactDetailScreen = () => {
                   <CardBody>{phone.number}</CardBody>
                 </Card>
               ))}
+              <Button
+                marginTop={12}
+                leftIcon={<DeleteIcon />}
+                colorScheme='red'
+                variant='ghost'
+                width='fit-content'
+                alignSelf='center'
+              >
+                Delete
+              </Button>
             </Stack>
           </Stack>
         </Stack>
