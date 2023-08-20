@@ -1,7 +1,6 @@
+import { ContactCard } from '@/components/contactCard/ContactCard';
 import { useContactList } from '@/modules/contact-list/contactListHooks';
-import { Stack, Text } from '@chakra-ui/react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Spinner, Stack, Text } from '@chakra-ui/react';
 
 export const ContactLisScreen = () => {
   const { loading, data } = useContactList({
@@ -10,29 +9,24 @@ export const ContactLisScreen = () => {
   });
   
   return (
-    <Stack alignItems='center'>
-      <Stack maxWidth={720} width='full'>
-        <Stack alignItems='center' marginTop={4}>
-          <Link href='/'>
-            <Image 
-              src='/images/my-contact.png' 
-              alt='Cake Story'
-              width={150}
-              height={100}
-            />
-          </Link>
+    <Stack>
+      {loading && (
+        <Stack alignItems='center' marginTop={8}>
+          <Spinner size='lg' thickness='3px' />
         </Stack>
-        {loading && (
-          <Text>Load Contact...</Text>
-        )}
-        {!loading && (data?.contact.length || 0) > 0 && (
-          <Stack>
-            {data?.contact.map((cont) => (
-              <Text key={cont.id}>{cont.first_name} {cont.last_name}</Text>
-            ))}
-          </Stack>
-        )}
-      </Stack>
+      )}
+      {!loading && (data?.contact.length || 0) > 0 && (
+        <Stack marginTop={8}>
+          {data?.contact.map((cont) => (
+            <ContactCard
+              key={cont.id}
+              firstName={cont.first_name}
+              lastName={cont.last_name}
+              phoneNumber={cont.phones?.[0]?.number || ''}
+            />
+          ))}
+        </Stack>
+      )}
     </Stack>
   );
 };
