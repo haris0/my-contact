@@ -17,7 +17,7 @@ export const ContactLisScreen = () => {
         </Stack>
       )}
       {!loading && (data?.contact.length || 0) > 0 && (
-        <Stack marginTop={4} padding={4}>
+        <Stack marginTop={2} padding={4}>
           {data?.contact.map((cont) => (
             <Link key={cont.id} href={`/contact/${cont.id}`}>
               <ContactCard

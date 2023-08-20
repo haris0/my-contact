@@ -1,5 +1,5 @@
 import { useContactDetail } from '@/modules/contact-detail/contactDetailHooks';
-import { Spinner, Stack, Text } from '@chakra-ui/react';
+import { Avatar, Card, CardBody, Spinner, Stack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -14,6 +14,7 @@ export const ContactDetailScreen = () => {
       skip: !query?.contactId
     },
   )
+
   return (
     <Stack>
       {loading && (
@@ -23,9 +24,30 @@ export const ContactDetailScreen = () => {
       )}
       {!loading && data?.contact_by_pk && (
         <Stack>
-          <Text>
-            {data.contact_by_pk.first_name}
-          </Text>
+          <Stack
+            width='full'
+            height={24}
+            backgroundColor='gray.700'
+          >
+          </Stack>
+          <Stack marginTop={-14} width='full'>
+            <Avatar 
+              name={data.contact_by_pk.first_name+" "+data.contact_by_pk?.last_name}
+              size='xl'
+              alignSelf='center'
+            />
+            <Text alignSelf='center' fontSize='xl'>
+              {data.contact_by_pk.first_name+" "+data.contact_by_pk?.last_name}
+            </Text>
+            <Stack padding={4}>
+              <Text>Phone Numbers:</Text>
+              {data.contact_by_pk.phones.map((phone) => (
+                <Card key={phone.number}>
+                  <CardBody>{phone.number}</CardBody>
+                </Card>
+              ))}
+            </Stack>
+          </Stack>
         </Stack>
       )}
       {!loading && !data?.contact_by_pk && (

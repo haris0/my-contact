@@ -9,18 +9,24 @@ type LayoutProps = {
 
 export const Layout = (props: LayoutProps) => {
   return (
-    <Stack alignItems='center'>
+    <Stack alignItems='center' spacing={0}>
+      <Stack 
+        alignItems='center' 
+        paddingY={3}
+        borderBottomWidth={2}
+        borderBottomColor='teal.900'
+        width='full'
+      >
+        <Link href='/'>
+          <Image 
+            src='/images/my-contact.png' 
+            alt='Cake Story'
+            width={150}
+            height={100}
+          />
+        </Link>
+      </Stack>
       <Stack maxWidth={720} width='full'>
-        <Stack alignItems='center' marginTop={4}>
-          <Link href='/'>
-            <Image 
-              src='/images/my-contact.png' 
-              alt='Cake Story'
-              width={150}
-              height={100}
-            />
-          </Link>
-        </Stack>
         {props.children}
       </Stack>
     </Stack>
