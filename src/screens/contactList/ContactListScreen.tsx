@@ -3,6 +3,7 @@ import { DeleteContactModal } from '@/components/deleteContactModal/DeleteContac
 import { Pagination } from '@/components/pagination/Pagination';
 import { Contact } from '@/modules/contact-list/contactListEntity';
 import { useContactList } from '@/modules/contact-list/contactListHooks';
+import { useDebouncedEffect } from '@/shared/hooks';
 import { AddIcon, SearchIcon } from '@chakra-ui/icons';
 import {
   Button,
@@ -18,15 +19,28 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 export const ContactLisScreen = () => {
+  const router = useRouter();
+  
   const [currectPage, setCurrectPage] = useState(0);
   const [selectedContact, setSelectedContact] = useState<Contact>();
+  const [keyword, setKeyword] = useState('');
   const deleteModal = useDisclosure();
-  const router = useRouter();
 
   const { loading, data } = useContactList({
     limit: 10,
-    offset: currectPage
+    offset: currectPage,
+    where: router.query.keyword ? {
+      "first_name": { "_like": `%${router.query.keyword}%` }
+    } : undefined
   });
+
+  useDebouncedEffect(() => {
+    router.push({
+      pathname: '/',
+      query: keyword ? { keyword } : undefined,
+    }, undefined, { shallow: true });
+
+  }, [keyword], 500);
 
   useEffect(() => {
     if(router.query.page && Number(router.query.page) !== currectPage) {
@@ -34,22 +48,36 @@ export const ContactLisScreen = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.page]);
+
+  useEffect(() => {
+    if(router.query.keyword) {
+      setKeyword(String(router.query.keyword));
+    }
+  }, [router.query.keyword]);
   
   return (
     <Stack>
-      {loading && (
+      <Stack marginTop={1} padding={4}>
+        <InputGroup>
+          <InputLeftElement pointerEvents='none'>
+            <SearchIcon color='gray.300' />
+          </InputLeftElement>
+          <Input 
+            type='text' 
+            colorScheme='teal' 
+            placeholder='Search Contact by First Name'
+            value={keyword}
+            onChange={(event) => setKeyword(event.target.value)} 
+          />
+        </InputGroup>
+      </Stack>
+      {loading && (data?.contact.length || 0) < 1 && (
         <Stack alignItems='center' marginTop={8}>
           <Spinner size='lg' thickness='3px' />
         </Stack>
       )}
       {!loading && (data?.contact.length || 0) > 0 && (
-        <Stack marginTop={1} padding={4}>
-          <InputGroup>
-            <InputLeftElement pointerEvents='none'>
-              <SearchIcon color='gray.300' />
-            </InputLeftElement>
-            <Input type='text' colorScheme='teal' placeholder='Search Contact' />
-          </InputGroup>
+        <Stack paddingX={4} paddingBottom={3}>
           <Stack marginTop={2}>
             {data?.contact.map((cont) => (
               <Link key={cont.id} href={`/contact/${cont.id}`}>

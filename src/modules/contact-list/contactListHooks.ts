@@ -5,6 +5,7 @@ import { GET_CONTACT_LIST } from "./contactListQuery";
 type ContactListVariabels = {
   limit: number;
   offset: number;
+  where?: any;
 }
 
 export const useContactList = (variables: ContactListVariabels) => {
