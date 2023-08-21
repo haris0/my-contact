@@ -1,6 +1,7 @@
 import { useContactDetail } from '@/modules/contact-detail/contactDetailHooks';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Avatar, Button, Card, CardBody, Spinner, Stack, Text } from '@chakra-ui/react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -67,8 +68,14 @@ export const ContactDetailScreen = () => {
         </Stack>
       )}
       {!loading && !data?.contact_by_pk && (
-        <Stack>
-          <Text>Data Not Fond</Text>
+        <Stack width='full' alignItems='center' paddingY={14} spacing={6}>
+          <Image
+            src='/images/page-not-found.png' 
+            alt='user not found'
+            width={150}
+            height={100}
+          />
+          <Text>User Not Found</Text>
         </Stack>
       )}
     </Stack>
