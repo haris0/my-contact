@@ -3,8 +3,9 @@ import { DeleteContactModal } from '@/components/deleteContactModal/DeleteContac
 import { Pagination } from '@/components/pagination/Pagination';
 import { Contact } from '@/modules/contact-list/contactListEntity';
 import { useContactList } from '@/modules/contact-list/contactListHooks';
-import { SearchIcon } from '@chakra-ui/icons';
+import { AddIcon, SearchIcon } from '@chakra-ui/icons';
 import {
+  Button,
   Input,
   InputGroup,
   InputLeftElement,
@@ -82,6 +83,17 @@ export const ContactLisScreen = () => {
           }
         })}
       />
+      <Stack
+        position='fixed'
+        right={{ base: 4, md: 12 }}
+        bottom={{ base: 4, md: 12 }}
+      >
+        <Link href='contact/add'>
+          <Button borderRadius='full' width={12} height={12}>
+            <AddIcon />
+          </Button>
+        </Link>
+      </Stack>
       <DeleteContactModal 
         isOpen={deleteModal.isOpen}
         onClose={deleteModal.onClose}

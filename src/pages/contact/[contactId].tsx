@@ -1,6 +1,7 @@
 import { ContactDetailScreen } from "@/screens/contactDetail/ContactDetailScreen";
 import { GetStaticPaths, GetStaticProps } from "next";
 import getConfig from 'next/config'
+import Head from "next/head";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
@@ -19,5 +20,12 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export default function ContactDetail() {
-  return <ContactDetailScreen />
+  return (
+    <>
+      <Head>
+        <title>Contact Detail</title>
+      </Head>
+      <ContactDetailScreen />
+    </>
+  )
 };
