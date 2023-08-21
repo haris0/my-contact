@@ -116,7 +116,7 @@ export const ContactLisScreen = () => {
         right={{ base: 4, md: 12 }}
         bottom={{ base: 4, md: 12 }}
       >
-        <Link href='contact/add'>
+        <Link href='/add'>
           <Button borderRadius='full' width={12} height={12}>
             <AddIcon />
           </Button>
