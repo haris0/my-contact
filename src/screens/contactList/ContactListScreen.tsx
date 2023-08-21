@@ -1,5 +1,6 @@
 import { ContactCard } from '@/components/contactCard/ContactCard';
 import { DeleteContactModal } from '@/components/deleteContactModal/DeleteContactModal';
+import { Pagination } from '@/components/pagination/Pagination';
 import { Contact } from '@/modules/contact-list/contactListEntity';
 import { useContactList } from '@/modules/contact-list/contactListHooks';
 import { SearchIcon } from '@chakra-ui/icons';
@@ -12,15 +13,26 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 export const ContactLisScreen = () => {
+  const [currectPage, setCurrectPage] = useState(0);
+  const [selectedContact, setSelectedContact] = useState<Contact>();
+  const deleteModal = useDisclosure();
+  const router = useRouter();
+
   const { loading, data } = useContactList({
     limit: 10,
-    offset: 1
+    offset: currectPage
   });
-  const deleteModal = useDisclosure();
-  const [selectedContact, setSelectedContact] = useState<Contact>();
+
+  useEffect(() => {
+    if(router.query.page && Number(router.query.page) !== currectPage) {
+      setCurrectPage(Number(router.query.page))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query.page]);
   
   return (
     <Stack>
@@ -54,6 +66,22 @@ export const ContactLisScreen = () => {
           </Stack>
         </Stack>
       )}
+      <Pagination 
+        currectPage={currectPage}
+        dataLength={data?.contact.length || 0}
+        onPrev={() => router.push({
+          pathname: '/',
+          query: {
+            page: currectPage - 1
+          }
+        })}
+        onNext={() => router.push({
+          pathname: '/',
+          query: {
+            page: currectPage + 1
+          }
+        })}
+      />
       <DeleteContactModal 
         isOpen={deleteModal.isOpen}
         onClose={deleteModal.onClose}
