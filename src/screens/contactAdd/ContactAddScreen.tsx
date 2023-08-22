@@ -19,7 +19,12 @@ export const ContactAddScreen = () => {
 
   const { addContact, loading } = useAddContact({
     onCompleted() {
-      router.replace('/')
+      toast({
+        title: 'Success Save Contact',
+        status: 'success',
+        isClosable: true,
+      })
+      router.replace('/');
     },
     onError(error) {
       toast({

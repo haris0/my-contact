@@ -14,8 +14,9 @@ import {
 
 type DeleteContactModalProps = {
   isOpen: boolean;
-  onClose: () => void;
   contact?: Contact;
+  isDeleting?: boolean;
+  onClose: () => void;
   onDelete?: (id: number) => void; 
 }
 
@@ -36,6 +37,7 @@ export const DeleteContactModal = (props: DeleteContactModalProps) => {
           <Button
             leftIcon={<DeleteIcon />}
             colorScheme='red'
+            isLoading={props.isDeleting}
             onClick={() => props.onDelete?.(props.contact?.id || 0)}
           >
             Delete

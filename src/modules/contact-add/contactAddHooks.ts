@@ -1,6 +1,5 @@
-import { MutationHookOptions, useMutation } from "@apollo/client"
-import { ContactDetail } from "../contact-detail/contactDetailEntity";
-import { Phone } from "../contact-list/contactListEntity";
+import { MutationHookOptions, useMutation } from "@apollo/client";
+import { Contact, Phone } from "../contact-list/contactListEntity";
 import { ADD_CONTACT } from "./contactAddQuery";
 
 type AddContactVariabels = {
@@ -10,13 +9,13 @@ type AddContactVariabels = {
 }
 
 export const useAddContact = (option?: MutationHookOptions) => {
-  const [mutation, { data, loading, error }] = useMutation<ContactDetail>(ADD_CONTACT, {...option});
+  const [mutation, { data, loading, error }] = useMutation<Contact>(ADD_CONTACT, {...option});
 
-  const addContact = (variable: AddContactVariabels) => {
+  const addContact = (variables: AddContactVariabels) => {
     return mutation({ variables: { 
-      first_name: variable.firstName,
-      last_name : variable.lastName,
-      phones: variable.phones
+      first_name: variables.firstName,
+      last_name : variables.lastName,
+      phones: variables.phones
     }});
   }
 

@@ -1,6 +1,7 @@
 import { ContactCard } from '@/components/contactCard/ContactCard';
 import { DeleteContactModal } from '@/components/deleteContactModal/DeleteContactModal';
 import { Pagination } from '@/components/pagination/Pagination';
+import { useDeleteContact } from '@/modules/contact-delete/contactDeleteHooks';
 import { Contact } from '@/modules/contact-list/contactListEntity';
 import { useContactList } from '@/modules/contact-list/contactListHooks';
 import { useDebouncedEffect } from '@/shared/hooks';
@@ -13,6 +14,7 @@ import {
   Spinner, 
   Stack, 
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -22,6 +24,7 @@ const CONTACT_LIMIT = 10;
 
 export const ContactLisScreen = () => {
   const router = useRouter();
+  const toast = useToast();
   
   const [currectPage, setCurrectPage] = useState(1);
   const [selectedContact, setSelectedContact] = useState<Contact>();
@@ -47,6 +50,26 @@ export const ContactLisScreen = () => {
       }
     ]
   });
+
+  const { deleteContact, loading: deleting } = useDeleteContact({
+    onCompleted(data) {
+      toast({
+        title: `Success Delete ${data.delete_contact_by_pk.first_name} ${data.delete_contact_by_pk.last_name}`,
+        status: 'success',
+        isClosable: true,
+      });
+      deleteModal.onClose();
+      refetch();
+    },
+    onError(error) {
+      toast({
+        title: error.message,
+        status: 'error',
+        isClosable: true,
+      });
+      deleteModal.onClose();
+    },
+  })
 
   useDebouncedEffect(() => {
     router.push({
@@ -148,8 +171,10 @@ export const ContactLisScreen = () => {
       </Stack>
       <DeleteContactModal 
         isOpen={deleteModal.isOpen}
-        onClose={deleteModal.onClose}
         contact={selectedContact}
+        isDeleting={deleting}
+        onClose={deleteModal.onClose}
+        onDelete={(id) => deleteContact({ id })}
       />
     </Stack>
   );
