@@ -1,12 +1,16 @@
+import { DeleteContactModal } from '@/components/deleteContactModal/DeleteContactModal';
+import { useDeleteContact } from '@/modules/contact-delete/contactDeleteHooks';
 import { useContactDetail } from '@/modules/contact-detail/contactDetailHooks';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { Avatar, Button, Card, CardBody, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Avatar, Button, Card, CardBody, Spinner, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
 export const ContactDetailScreen = () => {
-  const { query } = useRouter();
+  const { query, ...router } = useRouter();
+  const toast = useToast();
+  const deleteModal = useDisclosure();
 
   const { data, loading } = useContactDetail(
     {
@@ -15,7 +19,27 @@ export const ContactDetailScreen = () => {
     {
       skip: !query?.contactId
     },
-  )
+  );
+
+  const { deleteContact, loading: deleting } = useDeleteContact({
+    onCompleted(data) {
+      toast({
+        title: `Success Delete ${data.delete_contact_by_pk.first_name} ${data.delete_contact_by_pk.last_name}`,
+        status: 'success',
+        isClosable: true,
+      });
+      deleteModal.onClose();
+      router.replace('/');
+    },
+    onError(error) {
+      toast({
+        title: error.message,
+        status: 'error',
+        isClosable: true,
+      });
+      deleteModal.onClose();
+    },
+  });
 
   return (
     <Stack>
@@ -60,11 +84,20 @@ export const ContactDetailScreen = () => {
                 variant='ghost'
                 width='fit-content'
                 alignSelf='center'
+                isLoading={deleting}
+                onClick={() => deleteModal.onOpen()}
               >
                 Delete
               </Button>
             </Stack>
           </Stack>
+          <DeleteContactModal 
+            isOpen={deleteModal.isOpen}
+            contact={data.contact_by_pk}
+            isDeleting={deleting}
+            onClose={deleteModal.onClose}
+            onDelete={(id) => deleteContact({ id })}
+          />
         </Stack>
       )}
       {!loading && !data?.contact_by_pk && (

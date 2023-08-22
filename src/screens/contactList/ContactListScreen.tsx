@@ -25,11 +25,11 @@ const CONTACT_LIMIT = 10;
 export const ContactLisScreen = () => {
   const router = useRouter();
   const toast = useToast();
+  const deleteModal = useDisclosure();
   
   const [currectPage, setCurrectPage] = useState(1);
   const [selectedContact, setSelectedContact] = useState<Contact>();
   const [keyword, setKeyword] = useState('');
-  const deleteModal = useDisclosure();
 
   const { loading, data, refetch } = useContactList({
     limit: CONTACT_LIMIT,
@@ -69,7 +69,7 @@ export const ContactLisScreen = () => {
       });
       deleteModal.onClose();
     },
-  })
+  });
 
   useDebouncedEffect(() => {
     router.push({
