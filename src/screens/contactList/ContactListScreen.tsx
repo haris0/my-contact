@@ -28,7 +28,7 @@ export const ContactLisScreen = () => {
   const [keyword, setKeyword] = useState('');
   const deleteModal = useDisclosure();
 
-  const { loading, data } = useContactList({
+  const { loading, data, refetch } = useContactList({
     limit: CONTACT_LIMIT,
     offset: CONTACT_LIMIT * (currectPage - 1),
     where: router.query.keyword ? {
@@ -70,6 +70,11 @@ export const ContactLisScreen = () => {
       setKeyword(String(router.query.keyword));
     }
   }, [router.query.keyword]);
+
+  useEffect(() => {
+    refetch()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
   return (
     <Stack>

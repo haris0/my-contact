@@ -8,11 +8,13 @@ type ContactFormProps = {
     key: number,
     value: string
   }[];
+  isLoading?: boolean;
   onChangeFirstName?: (name: string) => void;
   onChangeLastName?: (name: string) => void;
   onChangePhones?: (phone: string, index: number) => void;
   onAddPhone?: () => void;
   onDeletePhone?: (index: number) => void;
+  onSave?: () => void;
 }
 
 export const ContactForm = (props: ContactFormProps) => {
@@ -57,7 +59,11 @@ export const ContactForm = (props: ContactFormProps) => {
           )}
         </InputGroup>
       ))}
-      <Button marginTop={8}>
+      <Button 
+        marginTop={8} 
+        isLoading={props.isLoading}
+        onClick={props.onSave}
+      >
         Save Contact
       </Button>
     </Stack>

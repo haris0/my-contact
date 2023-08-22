@@ -1,8 +1,13 @@
 import { ContactForm } from "@/components/contactForm/ContactForm";
-import { Stack, Avatar } from "@chakra-ui/react";
+import { useAddContact } from "@/modules/contact-add/contactAddHooks";
+import { Stack, Avatar, useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export const ContactAddScreen = () => {
+  const router = useRouter();
+  const toast = useToast();
+  
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phones, setPhones] = useState([
@@ -11,6 +16,30 @@ export const ContactAddScreen = () => {
       value: ''
     }
   ]);
+
+  const { addContact, loading } = useAddContact({
+    onCompleted() {
+      router.replace('/')
+    },
+    onError(error) {
+      toast({
+        title: error.message,
+        status: 'error',
+        isClosable: true,
+      })
+    },
+  });
+
+  const handleSaveContact = () => {
+    addContact({
+      firstName,
+      lastName,
+      phones: phones.map((phone) => ({
+        number: phone.value
+      }))
+    })
+  }
+
 
   return (
     <Stack>
@@ -33,6 +62,7 @@ export const ContactAddScreen = () => {
           firstName={firstName}
           lastName={lastName}
           phones={phones}
+          isLoading={loading}
           onChangeFirstName={(value) => setFirstName(value)}
           onChangeLastName={(value) => setLastName(value)}
           onChangePhones={(value, index) => setPhones((prev) => {
@@ -50,6 +80,7 @@ export const ContactAddScreen = () => {
               value: ''
             }
           ])}
+          onSave={() => handleSaveContact()}
         />
       </Stack>
     </Stack>
