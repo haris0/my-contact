@@ -18,17 +18,19 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+const CONTACT_LIMIT = 10;
+
 export const ContactLisScreen = () => {
   const router = useRouter();
   
-  const [currectPage, setCurrectPage] = useState(0);
+  const [currectPage, setCurrectPage] = useState(1);
   const [selectedContact, setSelectedContact] = useState<Contact>();
   const [keyword, setKeyword] = useState('');
   const deleteModal = useDisclosure();
 
   const { loading, data } = useContactList({
-    limit: 10,
-    offset: currectPage,
+    limit: CONTACT_LIMIT,
+    offset: CONTACT_LIMIT * (currectPage - 1),
     where: router.query.keyword ? {
       "_or": [
         {
@@ -58,7 +60,7 @@ export const ContactLisScreen = () => {
     if(router.query.page && Number(router.query.page) !== currectPage) {
       setCurrectPage(Number(router.query.page))
     } else {
-      setCurrectPage(0)
+      setCurrectPage(1)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.page]);
@@ -126,6 +128,7 @@ export const ContactLisScreen = () => {
             page: currectPage + 1
           }
         })}
+        limit={CONTACT_LIMIT}
       />
       <Stack
         position='fixed'

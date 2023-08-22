@@ -4,6 +4,7 @@ import { Button, HStack } from "@chakra-ui/react";
 type PaginationProps = {
   currectPage: number;
   dataLength: number;
+  limit: number;
   onPrev?: () => void;
   onNext?: () => void;
 }
@@ -18,14 +19,14 @@ export const Pagination = (props: PaginationProps) => {
     >
       <Button
         leftIcon={<ArrowBackIcon />}
-        isDisabled={props.currectPage === 0}
+        isDisabled={props.currectPage === 1}
         onClick={props.onPrev}
       >
         Prev
       </Button>
       <Button
         rightIcon={<ArrowForwardIcon />}
-        isDisabled={props.dataLength < 10}
+        isDisabled={props.dataLength < props.limit}
         onClick={props.onNext}
       >
         Next
