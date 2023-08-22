@@ -30,7 +30,14 @@ export const ContactLisScreen = () => {
     limit: 10,
     offset: currectPage,
     where: router.query.keyword ? {
-      "first_name": { "_like": `%${router.query.keyword}%` }
+      "_or": [
+        {
+          "first_name": {"_like": `%${router.query.keyword}%` }
+        },
+        {
+          "last_name": {"_like": `%${router.query.keyword}%` }
+        }
+      ]
     } : undefined
   });
 
@@ -45,6 +52,8 @@ export const ContactLisScreen = () => {
   useEffect(() => {
     if(router.query.page && Number(router.query.page) !== currectPage) {
       setCurrectPage(Number(router.query.page))
+    } else {
+      setCurrectPage(0)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.page]);
@@ -65,7 +74,7 @@ export const ContactLisScreen = () => {
           <Input 
             type='text' 
             colorScheme='teal' 
-            placeholder='Search Contact by First Name'
+            placeholder='Search Contact by Name'
             value={keyword}
             onChange={(event) => setKeyword(event.target.value)} 
           />
@@ -101,12 +110,14 @@ export const ContactLisScreen = () => {
         onPrev={() => router.push({
           pathname: '/',
           query: {
+            ...router.query,
             page: currectPage - 1
           }
         })}
         onNext={() => router.push({
           pathname: '/',
           query: {
+            ...router.query,
             page: currectPage + 1
           }
         })}

@@ -18,7 +18,7 @@ type ContactFormProps = {
 export const ContactForm = (props: ContactFormProps) => {
   return (
     <Stack padding={4} spacing={3} marginBottom={4}>
-      <HStack>
+      <HStack flexDirection={{ base: 'column', md: 'row' }}>
         <Stack width='full'>
           <Text>First Name: </Text>
           <Input 
