@@ -38,7 +38,12 @@ export const ContactLisScreen = () => {
           "last_name": {"_like": `%${router.query.keyword}%` }
         }
       ]
-    } : undefined
+    } : undefined,
+    order_by: [
+      {
+        "first_name": "asc"
+      }
+    ]
   });
 
   useDebouncedEffect(() => {

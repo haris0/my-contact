@@ -6,6 +6,7 @@ type ContactListVariabels = {
   limit: number;
   offset: number;
   where?: any;
+  order_by?: any;
 }
 
 export const useContactList = (variables: ContactListVariabels) => {
