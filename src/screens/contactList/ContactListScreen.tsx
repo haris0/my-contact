@@ -37,10 +37,10 @@ export const ContactLisScreen = () => {
     where: router.query.keyword ? {
       "_or": [
         {
-          "first_name": {"_like": `%${router.query.keyword}%` }
+          "first_name": {"_ilike": `%${router.query.keyword}%` }
         },
         {
-          "last_name": {"_like": `%${router.query.keyword}%` }
+          "last_name": {"_ilike": `%${router.query.keyword}%` }
         }
       ]
     } : undefined,
@@ -70,6 +70,16 @@ export const ContactLisScreen = () => {
       deleteModal.onClose();
     },
   });
+
+  const handleChangePage = (page: number) => {
+    router.push({
+      pathname: '/',
+      query: {
+        ...router.query,
+        page,
+      }
+    })
+  }
 
   useDebouncedEffect(() => {
     router.push({
@@ -106,7 +116,7 @@ export const ContactLisScreen = () => {
           <InputLeftElement pointerEvents='none'>
             <SearchIcon color='gray.300' />
           </InputLeftElement>
-          <Input 
+          <Input
             type='text' 
             colorScheme='teal' 
             placeholder='Search Contact by Name'
@@ -142,20 +152,8 @@ export const ContactLisScreen = () => {
       <Pagination 
         currectPage={currectPage}
         dataLength={data?.contact.length || 0}
-        onPrev={() => router.push({
-          pathname: '/',
-          query: {
-            ...router.query,
-            page: currectPage - 1
-          }
-        })}
-        onNext={() => router.push({
-          pathname: '/',
-          query: {
-            ...router.query,
-            page: currectPage + 1
-          }
-        })}
+        onPrev={() => handleChangePage(currectPage - 1)}
+        onNext={() => handleChangePage(currectPage + 1)}
         limit={CONTACT_LIMIT}
       />
       <Stack

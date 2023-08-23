@@ -1,8 +1,12 @@
 import { ContactForm } from "@/components/contactForm/ContactForm";
 import { useAddContact } from "@/modules/contact-add/contactAddHooks";
+import { useContactList } from "@/modules/contact-list/contactListHooks";
+import { containsSpecialChars } from "@/shared/utils";
 import { Stack, Avatar, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
+
+const COUNRTY_CODE = '+62'
 
 export const ContactAddScreen = () => {
   const router = useRouter();
@@ -16,6 +20,26 @@ export const ContactAddScreen = () => {
       value: ''
     }
   ]);
+
+  const { refetch } = useContactList(
+    {
+      offset: 0,
+      limit: 10,
+      where: {
+        "_and": [
+          {
+            "first_name": {"_eq": firstName }
+          },
+          {
+            "last_name": {"_eq": lastName }
+          }
+        ]
+      },
+    },
+    {
+      skip: true,
+    }
+  )
 
   const { addContact, loading } = useAddContact({
     onCompleted() {
@@ -35,12 +59,44 @@ export const ContactAddScreen = () => {
     },
   });
 
-  const handleSaveContact = () => {
+  const handleSaveContact = async () => {
+    // Validate filled
+    if(!firstName || !lastName || !phones?.[0].value) {
+      toast({
+        title: 'All fields must be filled',
+        status: 'error',
+        isClosable: true,
+      })
+      return;
+    }
+
+    // Validate special characters
+    if(containsSpecialChars(`${firstName}${lastName}`)) {
+      toast({
+        title: 'Name should not contain special characters',
+        status: 'error',
+        isClosable: true,
+      })
+      return;
+    }
+
+    // Validate unique name
+    const { data } = await refetch();
+    if(data.contact.length > 0) {
+      toast({
+        title: 'Name must be unique',
+        status: 'error',
+        isClosable: true,
+      })
+      return;
+    }
+
+    // Save contact
     addContact({
       firstName,
       lastName,
       phones: phones.map((phone) => ({
-        number: phone.value
+        number: COUNRTY_CODE+phone.value
       }))
     })
   }

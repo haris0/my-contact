@@ -6,7 +6,7 @@ type ContactDetailVariabels = {
   id: number;
 }
 
-export const useContactDetail = (variables: ContactDetailVariabels, option: QueryHookOptions) => {
+export const useContactDetail = (variables: ContactDetailVariabels, option?: QueryHookOptions) => {
   return useQuery<ContactDetail>(GET_CONTACT_DETAIL, {
     variables,
     ...option
