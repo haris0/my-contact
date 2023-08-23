@@ -10,10 +10,10 @@ import {
 } from "@chakra-ui/react";
 
 type ContactCardProps = {
-
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  isFavorite?: boolean;
   onRemove?: () => void;
   onFavorite?: () => void;
 }
@@ -42,17 +42,19 @@ export const ContactCard = (props: ContactCardProps) => {
               }}
               size='xs'
             >
-              <StarIcon />
+              <StarIcon color={props.isFavorite ? 'yellow.400' : undefined} />
             </Button>
-            <Button 
-              onClick={(event) => {
-                event.preventDefault();
-                props.onRemove?.();
-              }}
-              size='xs'
-            >
-              <DeleteIcon />
-            </Button>
+            {props.onRemove && (
+              <Button 
+                onClick={(event) => {
+                  event.preventDefault();
+                  props.onRemove?.();
+                }}
+                size='xs'
+              >
+                <DeleteIcon />
+              </Button>
+            )}
           </Stack>
         </HStack>
       </CardBody>
