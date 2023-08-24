@@ -49,7 +49,7 @@ export const ContactForm = ({
         <InputGroup key={phone.key}>
           <Input
             value={phone.value}
-            type='number'
+            type='tel'
             placeholder='Phone Number' 
             onChange={(event) => props.onChangePhones?.(event.target.value, index)}
           />
