@@ -128,7 +128,7 @@ export const ContactAddScreen = () => {
           onChangeLastName={(value) => setLastName(value)}
           onChangePhones={(value, index) => setPhones((prev) => {
             prev[index].value = value;
-            return prev;
+            return [...prev];
           })}
           onDeletePhone={(index) => setPhones((prev) => {
             const filtered = prev.filter((_value, idx) => idx !== index)
@@ -141,7 +141,7 @@ export const ContactAddScreen = () => {
               value: ''
             }
           ])}
-          onSave={() => handleSaveContact()}
+          onSubmit={() => handleSaveContact()}
         />
       </Stack>
     </Stack>

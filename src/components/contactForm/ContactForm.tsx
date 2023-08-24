@@ -9,21 +9,26 @@ type ContactFormProps = {
     value: string
   }[];
   isLoading?: boolean;
+  type?: 'ADD' | 'EDIT'
   onChangeFirstName?: (name: string) => void;
   onChangeLastName?: (name: string) => void;
   onChangePhones?: (phone: string, index: number) => void;
-  onAddPhone?: () => void;
+  onAddPhone?: (phone: string) => void;
   onDeletePhone?: (index: number) => void;
-  onSave?: () => void;
+  onSubmit?: () => void;
 }
 
-export const ContactForm = (props: ContactFormProps) => {
+export const ContactForm = ({
+  type = 'ADD',
+  ...props
+}: ContactFormProps) => {
   return (
     <Stack padding={4} spacing={3} marginBottom={4}>
       <HStack flexDirection={{ base: 'column', md: 'row' }}>
         <Stack width='full'>
           <Text>First Name: </Text>
-          <Input 
+          <Input
+            value={props.firstName}
             type='Text' 
             placeholder='First Name'
             onChange={(event) => props.onChangeFirstName?.(event.target.value)}
@@ -31,7 +36,8 @@ export const ContactForm = (props: ContactFormProps) => {
         </Stack>
         <Stack width='full'>
           <Text>Last Name: </Text>
-          <Input 
+          <Input
+            value={props.lastName}
             type='Text' 
             placeholder='Last Name'
             onChange={(event) => props.onChangeLastName?.(event.target.value)}
@@ -42,18 +48,19 @@ export const ContactForm = (props: ContactFormProps) => {
       {props.phones.map((phone, index) => (
         <InputGroup key={phone.key}>
           <InputLeftAddon>+62</InputLeftAddon>
-          <Input 
-            type='tel'
+          <Input
+            value={phone.value}
+            type='number'
             placeholder='Phone Number' 
             onChange={(event) => props.onChangePhones?.(event.target.value, index)}
           />
-          {index !== 0 && (
+          {type === 'ADD' && index !== 0 && (
             <Button marginLeft={3} colorScheme='red' onClick={() => props.onDeletePhone?.(index)}>
               <DeleteIcon />
             </Button>
           )}
           {index === props.phones.length - 1 && (
-            <Button marginLeft={3} onClick={props.onAddPhone}>
+            <Button marginLeft={3} onClick={() => props.onAddPhone?.(phone.value)}>
               <AddIcon />
             </Button>
           )}
@@ -62,9 +69,9 @@ export const ContactForm = (props: ContactFormProps) => {
       <Button 
         marginTop={8} 
         isLoading={props.isLoading}
-        onClick={props.onSave}
+        onClick={props.onSubmit}
       >
-        Save Contact
+        {type === 'ADD' ? 'Save Contact' : 'Edit Contact'}
       </Button>
     </Stack>
   );
