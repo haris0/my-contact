@@ -6,8 +6,6 @@ import { Stack, Avatar, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const COUNRTY_CODE = '+62'
-
 export const ContactAddScreen = () => {
   const router = useRouter();
   const toast = useToast();
@@ -96,7 +94,7 @@ export const ContactAddScreen = () => {
       firstName,
       lastName,
       phones: phones.map((phone) => ({
-        number: COUNRTY_CODE+phone.value
+        number: phone.value
       }))
     })
   }

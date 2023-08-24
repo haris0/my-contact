@@ -47,7 +47,6 @@ export const ContactForm = ({
       <Text>Phone Numbers: </Text>
       {props.phones.map((phone, index) => (
         <InputGroup key={phone.key}>
-          <InputLeftAddon>+62</InputLeftAddon>
           <Input
             value={phone.value}
             type='number'

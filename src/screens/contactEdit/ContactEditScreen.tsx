@@ -10,8 +10,6 @@ import Image from 'next/image';
 import { useEditPhoneContact } from '@/modules/phone-edit/phoneEditHooks';
 import { useAddPhoneContact } from '@/modules/phone-add/phoneAddHooks';
 
-const COUNRTY_CODE = '+62';
-
 const ContactEditScreen = () => {
   const { query } = useRouter();
   const toast = useToast();
@@ -128,7 +126,7 @@ const ContactEditScreen = () => {
     await Promise.all(filteredPhone.map((phone, index) => editPhoneContact({
       id: contactDetail?.contact_by_pk.id || 0,
       phone: contactDetail?.contact_by_pk?.phones?.[index].number || '',
-      newPhone: COUNRTY_CODE+phone.value
+      newPhone: phone.value
     })));
 
     toast({
@@ -155,12 +153,11 @@ const ContactEditScreen = () => {
       }
     ]);
 
-    const phoneWithCode = COUNRTY_CODE+phone;
-    const phoneIdx = contactDetail?.contact_by_pk.phones.findIndex((p) => p.number === phoneWithCode) ?? -1;
+    const phoneIdx = contactDetail?.contact_by_pk.phones.findIndex((p) => p.number === phone) ?? -1;
     if(phoneIdx === -1) {
       await addPhoneContact({
         id: contactDetail?.contact_by_pk.id || 0,
-        phone: phoneWithCode
+        phone: phone
       })
       refetch();
     }
@@ -172,7 +169,7 @@ const ContactEditScreen = () => {
       setLastName(contactDetail.contact_by_pk?.last_name)
       setPhones(contactDetail.contact_by_pk?.phones.map((phone, index) => ({
         key: index,
-        value: phone.number.split('+62')[1] || phone.number.split('+62')[0],
+        value: phone.number,
       })))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
