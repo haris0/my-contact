@@ -3,15 +3,16 @@ import { useContactDetail } from '@/modules/contact-detail/contactDetailHooks';
 import { useEditContact } from '@/modules/contact-edit/contactEditHooks';
 import { useContactList } from '@/modules/contact-list/contactListHooks';
 import { containsSpecialChars } from '@/shared/utils';
-import { Avatar, Spinner, Stack, useToast, Text } from '@chakra-ui/react';
+import { Spinner, Stack, useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useEditPhoneContact } from '@/modules/phone-edit/phoneEditHooks';
 import { useAddPhoneContact } from '@/modules/phone-add/phoneAddHooks';
+import { HeaderWithAva } from '@/components/headerWithAva/HeaderWithAva';
+import { UserNotFound } from '@/components/userNotFound/UserNotFound';
 
 const ContactEditScreen = () => {
-  const { query } = useRouter();
+  const { query, ...router } = useRouter();
   const toast = useToast();
 
   const [firstName, setFirstName] = useState('');
@@ -134,6 +135,7 @@ const ContactEditScreen = () => {
       status: 'success',
       isClosable: true,
     })
+    router.back();
   }
 
   const handleAddPhoneContact = async (phone: string) => {
@@ -184,20 +186,9 @@ const ContactEditScreen = () => {
       )}
       {!loadingContactDetail && contactDetail?.contact_by_pk && (
         <Stack>
-          <Stack
-            width='full'
-            height={24}
-            backgroundColor='gray.700'
-            padding={2}
-            alignItems='flex-end'
+          <HeaderWithAva
+            name={(firstName || lastName) ? firstName+" "+lastName : undefined}
           />
-          <Stack marginTop={-14} width='full'>
-            <Avatar 
-              name={(firstName || lastName) ? firstName+" "+lastName : undefined}
-              size='xl'
-              alignSelf='center'
-            />
-          </Stack>
           <Stack marginTop={4}>
             <ContactForm 
               type='EDIT'
@@ -222,15 +213,7 @@ const ContactEditScreen = () => {
         </Stack>
       )}
       {!loadingContactDetail && !contactDetail?.contact_by_pk && (
-        <Stack width='full' alignItems='center' paddingY={14} spacing={6}>
-          <Image
-            src='/images/page-not-found.png' 
-            alt='user not found'
-            width={150}
-            height={100}
-          />
-          <Text>User Not Found</Text>
-        </Stack>
+        <UserNotFound />
       )}
     </Stack>
   );

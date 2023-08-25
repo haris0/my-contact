@@ -113,11 +113,6 @@ export const ContactLisScreen = () => {
       setKeyword(String(router.query.keyword));
     }
   }, [router.query.keyword]);
-
-  useEffect(() => {
-    refetch()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   
   return (
     <Stack>

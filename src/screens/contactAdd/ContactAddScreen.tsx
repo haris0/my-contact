@@ -1,8 +1,9 @@
 import { ContactForm } from "@/components/contactForm/ContactForm";
+import { HeaderWithAva } from "@/components/headerWithAva/HeaderWithAva";
 import { useAddContact } from "@/modules/contact-add/contactAddHooks";
 import { useContactList } from "@/modules/contact-list/contactListHooks";
 import { containsSpecialChars } from "@/shared/utils";
-import { Stack, Avatar, useToast } from "@chakra-ui/react";
+import { Stack, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -102,20 +103,9 @@ export const ContactAddScreen = () => {
 
   return (
     <Stack>
-      <Stack
-        width='full'
-        height={24}
-        backgroundColor='gray.700'
-        padding={2}
-        alignItems='flex-end'
+      <HeaderWithAva 
+        name={(firstName || lastName) ? firstName+" "+lastName : undefined}
       />
-      <Stack marginTop={-14} width='full'>
-        <Avatar 
-          name={(firstName || lastName) ? firstName+" "+lastName : undefined}
-          size='xl'
-          alignSelf='center'
-        />
-      </Stack>
       <Stack marginTop={4}>
         <ContactForm 
           firstName={firstName}
