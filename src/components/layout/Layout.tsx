@@ -23,6 +23,7 @@ export const Layout = (props: LayoutProps) => {
             alt='Cake Story'
             width={150}
             height={100}
+            priority
           />
         </Link>
       </Stack>

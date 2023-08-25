@@ -1,5 +1,5 @@
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
-import { Button, HStack, Input, InputGroup, InputLeftAddon, Stack, Text } from "@chakra-ui/react";
+import { Button, HStack, Input, InputGroup, Stack, Text } from "@chakra-ui/react";
 
 type ContactFormProps = {
   firstName: string;
